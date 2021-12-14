@@ -1,0 +1,1 @@
+# A Laravel package example

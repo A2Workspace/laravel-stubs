@@ -1,0 +1,39 @@
+{
+    "name": "a2workspace/laravel-stubs",
+    "description": "A Laravel package example.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shishamou",
+            "email": "shishatw225@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "6.x"
+    },
+    "autoload": {
+        "psr-4": {
+            "A2Workspace\\Stubs\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "platform": {
+            "ext-posix": "0"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "A2Workspace\\Stubs\\ServiceProvider"
+            ]
+        }
+    }
+}
