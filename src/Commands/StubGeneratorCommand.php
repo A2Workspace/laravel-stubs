@@ -334,6 +334,7 @@ class StubGeneratorCommand extends Command
         $destinations = [
             $this->laravel->getNamespace() => $this->laravel['path'],
             'Tests\\' => $this->laravel->basePath('tests'),
+            'Database\\' => $this->laravel->basePath('database'),
         ];
 
         foreach ($destinations as $rootNamespace => $destination) {
