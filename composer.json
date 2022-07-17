@@ -1,6 +1,6 @@
 {
     "name": "a2workspace/laravel-stubs",
-    "description": "A Laravel package example.",
+    "description": "一個基於專案的類別模板注入器。",
     "license": "MIT",
     "authors": [
         {
