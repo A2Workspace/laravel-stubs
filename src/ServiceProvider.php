@@ -13,7 +13,10 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     public function boot()
     {
-        // ...
+        $this->publishes([
+            __DIR__ . '/../publishes/config.php' => config_path('stubs.php'),
+            __DIR__ . '/../publishes/resources' => resource_path('stubs'),
+        ], '@a2workspace/laravel-stubs');
     }
 
     /**
