@@ -45,7 +45,7 @@ class StubGeneratorCommand extends Command
     /**
      * @var string
      */
-    const REGEXP_NAMESPACE = '/^namespace (([A-Z][a-zA-Z]+)(\\\[A-Z][a-zA-Z]+)+);/m';
+    const REGEXP_NAMESPACE = '/^namespace (([A-Z][a-zA-Z]+)(\\\[A-Z][a-zA-Z]+)*);/m';
 
     /**
      * @var string

@@ -7,6 +7,13 @@ use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
+    // protected function setUp(): void
+    // {
+    //     parent::setUp();
+
+    //     // ...
+    // }
+
     protected function getEnvironmentSetUp($app)
     {
         $app['config']->set('stubs.paths', [
