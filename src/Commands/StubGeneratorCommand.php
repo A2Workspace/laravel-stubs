@@ -9,6 +9,7 @@ use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
+#[AsCommand(name: 'make:a...')]
 class StubGeneratorCommand extends Command
 {
     /**
@@ -45,7 +46,7 @@ class StubGeneratorCommand extends Command
     /**
      * @var string
      */
-    const REGEXP_NAMESPACE = '/^namespace (([A-Z][a-zA-Z]+)(\\\[A-Z][a-zA-Z]+)+);/m';
+    const REGEXP_NAMESPACE = '/^namespace (([A-Z][a-zA-Z]+)(\\\[A-Z][a-zA-Z]+)*);/m';
 
     /**
      * @var string
@@ -330,28 +331,39 @@ class StubGeneratorCommand extends Command
         }
 
         // 接著，我們嘗試比對 namespace。若符合則生成對應目錄的完整路徑。
-        // 目前支援 App\ 與 Tests\
         $destinations = [
             $this->laravel->getNamespace() => $this->laravel['path'],
             'Tests\\' => $this->laravel->basePath('tests'),
-            'Database\\' => $this->laravel->basePath('database'),
+            'Database\\Factories' => $this->laravel->databasePath('factories'),
+            'Database\\Seeders' => $this->laravel->databasePath('seeders'),
         ];
 
         foreach ($destinations as $rootNamespace => $destination) {
-            if (! Str::startsWith($namespace, $rootNamespace)) {
+            // 處理 namespace Test\Feature; 這種情形
+            if (Str::startsWith($namespace, $rootNamespace)) {
+                $relative = Str::replaceFirst($rootNamespace, '', $namespace);
+                $relative = str_replace('\\', '/', $relative);
+            }
+            // 處理 namespace Test; 這種情形
+            else if ($namespace === substr($rootNamespace, 0, -1)) {
+                $relative = '';
+            }
+            // 例外則跳過
+            else {
                 continue;
             }
 
-            $relative = Str::replaceFirst($rootNamespace, '', $namespace);
-            $relative = str_replace('\\', '/', $relative);
-
-            $path = join('/', [
+            $path = [
                 $destination,
                 $relative,
                 "{$classname}.php"
-            ]);
+            ];
 
-            return str_replace('/', DIRECTORY_SEPARATOR, $path);
+            $path = join('/', $path);
+            $path = str_replace('//', '/', $path);
+            $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+
+            return $path;
         }
 
         return false;

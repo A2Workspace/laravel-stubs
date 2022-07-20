@@ -24,16 +24,19 @@
             "Tests\\": "tests/"
         }
     },
-    "config": {
-        "platform": {
-            "ext-posix": "0"
-        }
-    },
     "extra": {
         "laravel": {
             "providers": [
                 "A2Workspace\\Stubs\\ServiceProvider"
             ]
         }
+    },
+    "scripts": {
+        "test": [
+            "vendor/bin/phpunit"
+        ],
+        "test-coverage": [
+            "vendor/bin/phpunit --coverage-html coverage"
+        ]
     }
 }
