@@ -2,30 +2,14 @@
 
 namespace Tests;
 
-use A2Workspace\Stubs\Commands\StubGeneratorCommand;
-use Illuminate\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Testing\PendingCommand;
 use Tests\TestCase;
-use Mockery as m;
-use Closure;
 
-class StubGeneratorCommandTest extends TestCase
+class CallArtisanCommandTest extends TestCase
 {
     protected function tearDown(): void
     {
         parent::tearDown();
-
-        m::close();
-    }
-
-    private function refMethod($name, $scope): Closure
-    {
-        $ref = function () use ($name) {
-            return $this->$name(...func_get_args());
-        };
-
-        return $ref->bindTo($scope, $scope);
     }
 
     private function expectsCommandChoice(PendingCommand $command): PendingCommand
@@ -43,32 +27,6 @@ class StubGeneratorCommandTest extends TestCase
     // = Tests
     // =========================================================================
 
-    public function test_resolveStubNamespace_method()
-    {
-        /** @var \Illuminate\Filesystem\Filesystem $fs */
-        $fs = m::mock(Filesystem::class);
-        $command = new StubGeneratorCommand($fs);
-
-        $ref = $this->refMethod('resolveStubNamespace', $command);
-
-        $this->assertEquals('Foo', $ref('namespace Foo;'));
-        $this->assertEquals('Foo\Bar', $ref('namespace Foo\Bar;'));
-        $this->assertFalse($ref('namespace Foo\Bar'));
-        $this->assertFalse($ref('namespace Foo\bar;'));
-    }
-
-    public function test_resolveStubClassname_method()
-    {
-        /** @var \Illuminate\Filesystem\Filesystem $fs */
-        $fs = m::mock(Filesystem::class);
-        $command = new StubGeneratorCommand($fs);
-
-        $ref = $this->refMethod('resolveStubClassname', $command);
-
-        $this->assertEquals('Foobar', $ref('class Foobar'));
-        $this->assertEquals('Foobar', $ref('class Foobar extends BaseFoobar'));
-    }
-
     public function test_call_artisan_command()
     {
         $expectedPutPath = app_path('Models' . DIRECTORY_SEPARATOR . 'Category.php');
@@ -77,10 +35,8 @@ class StubGeneratorCommandTest extends TestCase
         $command = $this->expectsCommandChoice($command);
 
         $command->expectsQuestion('請輸入要注入的名稱', 'Category');
-        $command->expectsOutput(
-            sprintf('已建立 "%s"', $expectedPutPath)
-        );
 
+        $command->expectsOutput(sprintf('已建立 "%s"', $expectedPutPath));
         $command->assertExitCode(0);
         $command->run();
 
@@ -107,10 +63,7 @@ class StubGeneratorCommandTest extends TestCase
             'yes'
         );
 
-        $command->expectsOutput(
-            sprintf('已建立 "%s"', $expectedPutPath)
-        );
-
+        $command->expectsOutput(sprintf('已建立 "%s"', $expectedPutPath));
         $command->assertExitCode(0);
         $command->run();
 
@@ -150,5 +103,39 @@ class StubGeneratorCommandTest extends TestCase
         );
 
         @unlink($expectedPutPath);
+    }
+
+    public function test_call_artisan_command_with_filter()
+    {
+        $expectedPutPath = app_path('Models' . DIRECTORY_SEPARATOR . 'Category.php');
+
+        $command = $this->artisan('make:a...', [
+            'filter' => 'model',
+        ]);
+        $command = $this->expectsCommandChoice($command);
+
+        $command->expectsQuestion('請輸入要注入的名稱', 'Category');
+
+        $command->expectsOutput(sprintf('已建立 "%s"', $expectedPutPath));
+        $command->assertExitCode(0);
+        $command->run();
+
+        $this->assertFileEquals(
+            __DIR__ . '/fixtures/category_model.php',
+            $expectedPutPath,
+        );
+
+        @unlink($expectedPutPath);
+    }
+
+    public function test_call_artisan_command_with_filter_and_not_found()
+    {
+        $command = $this->artisan('make:a...', [
+            'filter' => 'foobar',
+        ]);
+
+        $command->expectsOutput('找不到符合的 Stub 檔案');
+        $command->assertExitCode(0);
+        $command->run();
     }
 }
