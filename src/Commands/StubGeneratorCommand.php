@@ -335,24 +335,34 @@ class StubGeneratorCommand extends Command
             'Tests\\' => $this->laravel->basePath('tests'),
             'Database\\Factories' => $this->laravel->databasePath('factories'),
             'Database\\Seeders' => $this->laravel->databasePath('seeders'),
-            'Database\\' => $this->laravel->databasePath(''),
         ];
 
         foreach ($destinations as $rootNamespace => $destination) {
-            if (! Str::startsWith($namespace, $rootNamespace)) {
+            // 處理 namespace Test\Feature; 這種情形
+            if (Str::startsWith($namespace, $rootNamespace)) {
+                $relative = Str::replaceFirst($rootNamespace, '', $namespace);
+                $relative = str_replace('\\', '/', $relative);
+            }
+            // 處理 namespace Test; 這種情形
+            else if ($namespace === substr($rootNamespace, 0, -1)) {
+                $relative = '';
+            }
+            // 例外則跳過
+            else {
                 continue;
             }
 
-            $relative = Str::replaceFirst($rootNamespace, '', $namespace);
-            $relative = str_replace('\\', '/', $relative);
-
-            $path = join('/', [
+            $path = [
                 $destination,
                 $relative,
                 "{$classname}.php"
-            ]);
+            ];
 
-            return str_replace('/', DIRECTORY_SEPARATOR, str_replace('//', '/', $path));
+            $path = join('/', $path);
+            $path = str_replace('//', '/', $path);
+            $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+
+            return $path;
         }
 
         return false;

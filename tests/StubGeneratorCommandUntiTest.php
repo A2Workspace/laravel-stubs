@@ -85,6 +85,10 @@ class StubGeneratorCommandUntiTest extends TestCase
         );
     }
 
+    // =========================================================================
+    // = Test getDestinationPath()
+    // =========================================================================
+
     public function test_getDestinationPath_method()
     {
         $command = $this->makeCommand();
@@ -92,10 +96,42 @@ class StubGeneratorCommandUntiTest extends TestCase
         $ref = $this->refMethod('getDestinationPath', $command);
 
         $this->assertEquals(
+            base_path(static::resolvePath('app/Dummy.php')),
+            $ref("
+namespace App;
+class Dummy {}
+            ")
+        );
+
+        $this->assertEquals(
+            base_path(static::resolvePath('app/Models/Dummy.php')),
+            $ref("
+namespace App\Models;
+class Dummy {}
+            ")
+        );
+
+        $this->assertEquals(
+            base_path(static::resolvePath('tests/Dummy.php')),
+            $ref("
+namespace Tests;
+class Dummy {}
+            ")
+        );
+
+        $this->assertEquals(
             base_path(static::resolvePath('tests/Unit/Dummy.php')),
             $ref("
 namespace Tests\Unit;
 class Dummy {}
+            ")
+        );
+
+        $this->assertEquals(
+            database_path(static::resolvePath('factories/DummySeeder.php')),
+            $ref("
+namespace Database\Factories;
+class DummySeeder {}
             ")
         );
 
@@ -114,6 +150,10 @@ class DummySeeder {}
             ")
         );
     }
+
+    // =========================================================================
+    // = Test putFile()
+    // =========================================================================
 
     public function test_putFile_method()
     {
