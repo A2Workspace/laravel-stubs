@@ -9,6 +9,7 @@ use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
+#[AsCommand(name: 'make:a...')]
 class StubGeneratorCommand extends Command
 {
     /**
