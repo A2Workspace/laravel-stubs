@@ -8,6 +8,7 @@ use Illuminate\Filesystem\Filesystem;
 use Tests\TestCase;
 use Mockery as m;
 use Closure;
+use Mockery;
 
 class StubGeneratorCommandUntiTest extends TestCase
 {
@@ -112,5 +113,30 @@ namespace Unspported;
 class DummySeeder {}
             ")
         );
+    }
+
+    public function test_putFile_method()
+    {
+        /** @var \Illuminate\Filesystem\Filesystem $fs */
+        $fs = m::mock(Filesystem::class, function (Mockery\MockInterface $mock) {
+            $mock->shouldReceive('isDirectory')
+                ->once()
+                ->with('dir')
+                ->andReturn(false);
+
+            $mock->shouldReceive('makeDirectory')
+                ->once()
+                ->with('dir', 0777, true, true);
+
+            $mock->shouldReceive('put')
+                ->once()
+                ->with('dir/sub', 'content')
+                ->andReturn(true);
+        });
+
+        $command = new StubGeneratorCommand($fs);
+
+        $ref = $this->refMethod('putFile', $command);
+        $ref('dir/sub', 'content');
     }
 }
