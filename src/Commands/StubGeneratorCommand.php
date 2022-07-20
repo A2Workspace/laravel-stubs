@@ -330,11 +330,12 @@ class StubGeneratorCommand extends Command
         }
 
         // 接著，我們嘗試比對 namespace。若符合則生成對應目錄的完整路徑。
-        // 目前支援 App\ 與 Tests\
         $destinations = [
             $this->laravel->getNamespace() => $this->laravel['path'],
             'Tests\\' => $this->laravel->basePath('tests'),
-            'Database\\' => $this->laravel->basePath('database'),
+            'Database\\Factories' => $this->laravel->databasePath('factories'),
+            'Database\\Seeders' => $this->laravel->databasePath('seeders'),
+            'Database\\' => $this->laravel->databasePath(''),
         ];
 
         foreach ($destinations as $rootNamespace => $destination) {
@@ -351,7 +352,7 @@ class StubGeneratorCommand extends Command
                 "{$classname}.php"
             ]);
 
-            return str_replace('/', DIRECTORY_SEPARATOR, $path);
+            return str_replace('/', DIRECTORY_SEPARATOR, str_replace('//', '/', $path));
         }
 
         return false;

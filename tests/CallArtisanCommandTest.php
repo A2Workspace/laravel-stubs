@@ -39,11 +39,6 @@ class CallArtisanCommandTest extends TestCase
         return $command;
     }
 
-    private static function resolvePath(string $path): string
-    {
-        return str_replace('/', DIRECTORY_SEPARATOR, $path);
-    }
-
     // =========================================================================
     // = Tests
     // =========================================================================

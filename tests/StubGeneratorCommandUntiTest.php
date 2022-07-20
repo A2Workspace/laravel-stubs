@@ -22,7 +22,9 @@ class StubGeneratorCommandUntiTest extends TestCase
     {
         /** @var \Illuminate\Filesystem\Filesystem $fs */
         $fs = m::mock(Filesystem::class);
+
         $command = new StubGeneratorCommand($fs);
+        $command->setLaravel($this->app);
 
         return $command;
     }
@@ -79,6 +81,36 @@ class StubGeneratorCommandUntiTest extends TestCase
         $this->assertEquals(
             'namespace App\Models\Admin\Dummy;',
             $ref('namespace App\Models\Dummy;', 'Admin')
+        );
+    }
+
+    public function test_getDestinationPath_method()
+    {
+        $command = $this->makeCommand();
+
+        $ref = $this->refMethod('getDestinationPath', $command);
+
+        $this->assertEquals(
+            base_path(static::resolvePath('tests/Unit/Dummy.php')),
+            $ref("
+namespace Tests\Unit;
+class Dummy {}
+            ")
+        );
+
+        $this->assertEquals(
+            database_path(static::resolvePath('seeders/DummySeeder.php')),
+            $ref("
+namespace Database\Seeders;
+class DummySeeder {}
+            ")
+        );
+
+        $this->assertFalse($ref(''));
+        $this->assertFalse($ref("
+namespace Unspported;
+class DummySeeder {}
+            ")
         );
     }
 }
