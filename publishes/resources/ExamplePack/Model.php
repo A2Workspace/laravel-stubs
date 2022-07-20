@@ -2,12 +2,20 @@
 
 namespace App\Models;
 
+use Database\Factories\DummyFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Dummy extends Model
 {
     use HasFactory;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'dummies';
 
     /**
      * The attributes that are mass assignable.
@@ -29,6 +37,16 @@ class Dummy extends Model
         'is_published' => 'boolean',
         // ...
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return DummyFactory::new();
+    }
 
     /* =========================================================================
      * = Scopes
