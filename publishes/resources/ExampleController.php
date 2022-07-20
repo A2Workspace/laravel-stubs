@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dummy;
 use App\Http\Resources\Dummy as DummyResource;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class DummyController extends Controller
