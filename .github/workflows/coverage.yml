@@ -1,0 +1,41 @@
+name: tests
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        php: [7.4, 8.0, 8.1]
+        stability: [ prefer-stable ]
+
+    name: PHP ${{ matrix.php }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip
+          tools: composer:v2
+          coverage: xdebug
+
+      - name: composer install
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+
+      - name: Run tests
+        run: vendor/bin/phpunit --coverage-clover coverage.xml
+
+      - name: Codecov
+        uses: codecov/codecov-action@v3.1.0
+        with:
+          files: ./coverage.xml
