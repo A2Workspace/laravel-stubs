@@ -1,8 +1,26 @@
-# A2Workspace/Laravel-Stubs
-
+<h1 align="center">Laravel-Stubs</h1>
+<p align="center">
+<a href="https://github.com/A2Workspace/laravel-stubs">
+    <img alt="" src="https://github.com/A2Workspace/laravel-stubs/actions/workflows/coverage.yml/badge.svg">
+</a>
+<a href="https://github.com/A2Workspace/laravel-stubs">
+    <img alt="" src="https://img.shields.io/github/workflow/status/A2Workspace/laravel-stubs/tests?style=flat-square">
+</a>
+<a href="https://codecov.io/gh/A2Workspace/laravel-stubs">
+    <img alt="" src="https://img.shields.io/codecov/c/github/A2Workspace/laravel-stubs.svg?style=flat-square">
+</a>
+<a href="https://github.com/A2Workspace/laravel-stubs/blob/master/LICENSE">
+    <img alt="" src="https://img.shields.io/github/license/A2Workspace/laravel-stubs?style=flat-square">
+</a>
+<a href="https://packagist.org/packages/a2workspace/laravel-stubs">
+    <img alt="" src="https://img.shields.io/packagist/v/a2workspace/laravel-stubs.svg?style=flat-square">
+</a>
+<a href="https://packagist.org/packages/a2workspace/laravel-stubs">
+    <img alt="" src="https://img.shields.io/packagist/dt/a2workspace/laravel-stubs.svg?style=flat-square">
+</a>
+</p>
+<p align="center">一個基於專案的程式模板注入器。</p>
 <p align="center"><img src="/.github/animation.gif" alt="Laravel-Stubs demo"></p>
-
-一個基於專案的程式模板注入器。
 
 透過在專案中的 `resources/stubs` 目錄下，放置類別的模板文件，然後透過命令快速注入並生成。相比原生的 `artisan make:*` 命令可大大減少編寫時間，且模板檔案可隨版控被 git 紀錄。
 
