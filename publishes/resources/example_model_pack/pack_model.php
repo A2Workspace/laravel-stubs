@@ -4,8 +4,13 @@ namespace App\Models;
 
 use Database\Factories\DummyFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @method static \Illuminate\Database\Eloquent\Builder orderByPriority(bool $reversed = false)
+ * @method static \Illuminate\Database\Eloquent\Builder published()
+ */
 class Dummy extends Model
 {
     use HasFactory;
@@ -49,15 +54,26 @@ class Dummy extends Model
     }
 
     /* =========================================================================
+     * = Relations
+     * =========================================================================
+     */
+
+    // /**
+    //  * @return \Illuminate\Database\Eloquent\Relations\Relation
+    //  */
+    // public function relation(): Relations\Relation
+    // {
+    //     return $this->belongsTo(Relation::class);
+    // }
+
+    /* =========================================================================
      * = Scopes
      * =========================================================================
      */
 
     /**
-     * 按照優先度排序
-     *
-     * ```
-     * $query->orderByPriority();
+     * ```php
+     * Dummy::orderByPriority();
      * ```
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -70,10 +86,8 @@ class Dummy extends Model
     }
 
     /**
-     * 查詢僅上架
-     *
      * ```php
-     * $query->published();
+     * Dummy::published();
      * ```
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
